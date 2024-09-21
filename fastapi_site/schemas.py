@@ -1,3 +1,4 @@
+from starlette.authentication import SimpleUser, UnauthenticatedUser
 from pydantic import BaseModel, ConfigDict, SecretStr
 from enum import StrEnum, IntEnum
 from datetime import datetime
@@ -68,12 +69,12 @@ class BaseUser(BaseModel):
         attrs = tuple(f"{field}={f'\'{value}\'' if isinstance(value, str) else value}" for field, value in self.model_dump().items())
         return f"{self.__class__.__name__}({', '.join(attrs)})"
 
-class AnonymUser(BaseUser):
+class AnonymUser(BaseUser, UnauthenticatedUser):
     username: str = 'Anonym'
     role: UserRoles = UserRoles.visitor
     status: UerStatus = UerStatus.ACTIVE
 
-class User(BaseUser):
+class User(BaseUser, SimpleUser):
     email: str | None
     first_name: str | None = None
     last_name: str | None = None

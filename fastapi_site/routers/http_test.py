@@ -1,7 +1,7 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 
-from fastapi_site.dependencies import validate_jwt_token
+# from fastapi_site.dependencies import validate_jwt_token
 from fastapi_site.schemas import AnonymUser, User
 import httpx
 
@@ -10,16 +10,22 @@ router = APIRouter(
     tags=['test']
 )
 
-@router.get("/get_user")
-async def get_user(bearer_authorization: Annotated[User | AnonymUser, Depends(validate_jwt_token)]):
-    if bearer_authorization == None:
-        return AnonymUser()
-    api_url = "http://127.0.0.1:8001/api/test/get_user"
-    async with httpx.AsyncClient() as client:
-        response = await client.get(api_url, headers={"Authorization": bearer_authorization})
-        user = response.json()
-        return User(**user)
-    return AnonymUser()
+# @router.get("/get_user")
+# async def get_user(bearer_authorization: Annotated[User | AnonymUser, Depends(validate_jwt_token)]):
+#     if bearer_authorization == None:
+#         return AnonymUser()
+#     api_url = "http://127.0.0.1:8001/api/test/get_user"
+#     async with httpx.AsyncClient() as client:
+#         response = await client.get(api_url, headers={"Authorization": bearer_authorization})
+#         user = response.json()
+#         return User(**user)
+#     return AnonymUser()
+
+
+@router.get("/my-test")
+async def my_test(request: Request):
+    user = request.user
+    return user
 
 
 # @router.get("/users/me", dependencies=[Security(check_scope, scopes=['me'])])
