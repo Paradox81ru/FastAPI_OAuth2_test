@@ -1,11 +1,10 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from fastapi_site.routers import http_test
-from fastapi_site.middlewares.authentication import JWTTokenAuthBackend
 from starlette.middleware.authentication import AuthenticationMiddleware
-from starlette.middleware import Middleware
 
-import uvicorn
+from fastapi_site.middlewares.authentication import JWTTokenAuthBackend
+from fastapi_site.routers import http_test
 
 app = FastAPI()
 
